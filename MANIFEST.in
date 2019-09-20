@@ -1,0 +1,8 @@
+include *.rst
+include LICENSE
+recursive-include django_camunda *.html
+recursive-include django_camunda *.txt
+recursive-include django_camunda *.po
+global-exclude __pycache__
+global-exclude *.py[co]
+
