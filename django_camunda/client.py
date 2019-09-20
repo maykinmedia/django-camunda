@@ -17,7 +17,9 @@ logger = logging.getLogger(__name__)
 
 
 def get_client_class() -> type:
-    client_class = getattr(settings, "CAMUNDA_CLIENT_CLASS", "django_camunda.client.Camunda")
+    client_class = getattr(
+        settings, "CAMUNDA_CLIENT_CLASS", "django_camunda.client.Camunda"
+    )
     return import_string(client_class)
 
 
