@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.admin",
     "django_camunda",
+    "solo",
     "testapp",
 ]
 
