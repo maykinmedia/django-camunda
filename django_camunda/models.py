@@ -54,3 +54,21 @@ class CamundaConfig(SingletonModel):
         assert not self.rest_api_path.startswith("/")
         assert self.rest_api_path.endswith("/")
         return urljoin(self.root_url, self.rest_api_path)
+
+
+class ProcessInstanceMixin(models.Model):
+    # track camunda references
+    camunda_process_instance_id = models.CharField(
+        _("process instance ID"),
+        max_length=100,
+        unique=True,
+        blank=True,
+        null=True,
+        default=None,
+    )
+    camunda_process_instance_url = models.URLField(
+        _("process instance URL"), unique=True, blank=True, null=True, default=None
+    )
+
+    class Meta:
+        abstract = True
