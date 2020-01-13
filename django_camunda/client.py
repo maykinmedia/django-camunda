@@ -27,6 +27,7 @@ class Camunda:
     def __init__(self, config: Optional[CamundaConfig] = None):
         config = config or CamundaConfig.get_solo()
         self.root_url = config.api_root
+        self.auth = {"Authorization": config.auth_header} if config.auth_header else {}
 
     def request(self, path: str, method="GET", *args, **kwargs):
         assert not path.startswith("/"), "Provide relative API paths"
@@ -35,6 +36,7 @@ class Camunda:
         # add the API headers, so that Camunda can use the tokens. Essentially
         # we're forwarding Auth
         headers = kwargs.pop("headers", {})
+        headers.update(self.auth)
         headers.update(self.get_extra_headers(headers))
         kwargs["headers"] = headers
 

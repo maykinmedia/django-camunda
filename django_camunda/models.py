@@ -19,6 +19,13 @@ class CamundaConfig(SingletonModel):
     rest_api_path = models.CharField(
         _("REST api path"), max_length=255, default="engine-rest"
     )
+    auth_header = models.TextField(
+        _("authorization header"),
+        blank=True,
+        help_text=_(
+            "HTTP Authorization header value, required if the API is not open."
+        ),
+    )
 
     class Meta:
         verbose_name = _("Camunda configuration")
