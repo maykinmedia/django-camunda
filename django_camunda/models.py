@@ -14,7 +14,7 @@ class CamundaConfig(SingletonModel):
             "Root URL where camunda is installed. The REST api "
             "path is appended to this."
         ),
-        default="http://localhost:12018/gemeente-utrecht/camunda/",
+        default="https://camunda.example.com",
     )
     rest_api_path = models.CharField(
         _("REST api path"), max_length=255, default="engine-rest"

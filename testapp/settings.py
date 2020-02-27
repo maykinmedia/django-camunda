@@ -17,8 +17,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.admin",
-    "django_camunda",
     "solo",
+    "django_camunda",
     "testapp",
 ]
 
@@ -47,5 +47,7 @@ TEMPLATES = [
         },
     }
 ]
+
+STATIC_URL = "/static/"
 
 ROOT_URLCONF = "testapp.urls"

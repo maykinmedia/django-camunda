@@ -2,16 +2,16 @@
 Implements a camunda client.
 """
 import logging
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional, Union
 from urllib.parse import urljoin
 
 from django.conf import settings
 from django.utils.module_loading import import_string
 
-import inflection
 import requests
 
 from .models import CamundaConfig
+from .utils import underscoreize
 
 logger = logging.getLogger(__name__)
 
@@ -25,9 +25,14 @@ def get_client_class() -> type:
 
 class Camunda:
     def __init__(self, config: Optional[CamundaConfig] = None):
-        config = config or CamundaConfig.get_solo()
-        self.root_url = config.api_root
-        self.auth = {"Authorization": config.auth_header} if config.auth_header else {}
+        self.config = config or CamundaConfig.get_solo()
+        self.root_url = self.config.api_root
+
+    @property
+    def auth(self) -> dict:
+        if not self.config.auth_header:
+            return {}
+        return {"Authorization": self.config.auth_header}
 
     def request(self, path: str, method="GET", *args, **kwargs):
         assert not path.startswith("/"), "Provide relative API paths"
@@ -52,11 +57,20 @@ class Camunda:
         try:
             response.raise_for_status()
             if response.content:
-                response_data = response.json()
+                # json is the default Content-Type
+                content_type = response.headers.get("Content-Type", "application/json")
+                if content_type.startswith("application/json"):
+                    response_data = response.json()
 
-                if isinstance(response_data, (dict, list)):
-                    self.postprocess_response_data(response_data)
-            return underscoreize(response_data)
+                    if isinstance(response_data, (dict, list)):
+                        self.postprocess_response_data(response_data)
+
+                    response_data = underscoreize(response_data)
+                else:
+                    # binary content
+                    response_data = response.content
+
+            return response_data
         except Exception:
             try:
                 # see if we can grab any extra output
@@ -67,6 +81,21 @@ class Camunda:
             raise
         finally:
             self.after_request(_ref, response, response_data)
+
+    def get(self, path: str, params=None, *args, **kwargs):
+        return self.request(path, method="GET", params=params, *args, **kwargs)
+
+    def post(self, path: str, data=None, json=None, *args, **kwargs):
+        return self.request(path, method="POST", data=data, json=json, *args, **kwargs)
+
+    def put(self, path: str, data=None, *args, **kwargs):
+        return self.request(path, method="PUT", data=data, *args, **kwargs)
+
+    def patch(self, path: str, data=None, *args, **kwargs):
+        return self.request(path, method="PATCH", data=data, *args, **kwargs)
+
+    def delete(self, path: str, *args, **kwargs):
+        return self.request(path, method="DELETE", *args, **kwargs)
 
     # HOOKS for subclasses
 
@@ -84,21 +113,3 @@ class Camunda:
 
     def postprocess_response_data(self, data: Union[list, dict]) -> None:
         pass
-
-
-def underscoreize(data: Union[List, Dict, str, None]) -> Union[List, Dict, str, None]:
-    if isinstance(data, list):
-        return [underscoreize(item) for item in data]
-
-    if isinstance(data, dict):
-        new_data = {}
-        for key, value in data.items():
-            new_key = inflection.underscore(key)
-            # variables are dynamic names, can't make assumptions!
-            if key == "variables":
-                new_data[new_key] = value
-            else:
-                new_data[new_key] = underscoreize(value)
-        return new_data
-
-    return data

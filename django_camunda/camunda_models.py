@@ -1,9 +1,11 @@
 import uuid
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from dateutil.parser import parse
+
+from .types import JSONObject
 
 CONVERTERS = {
     type(None): lambda x: None,
@@ -40,6 +42,25 @@ class Model:
             setattr(self, attr, converter(value))
 
 
+def factory(model: type, data: Union[JSONObject, List[JSONObject]]) -> type:
+    _is_collection = isinstance(data, list)
+
+    known_kwargs = list(model.__annotations__.keys())
+
+    def _normalize(kwargs: dict):
+        to_keep = {key: value for key, value in kwargs.items() if key in known_kwargs}
+        return to_keep
+
+    if not _is_collection:
+        data = [data]
+
+    instances = [model(**_normalize(_raw)) for _raw in data]
+
+    if not _is_collection:
+        instances = instances[0]
+    return instances
+
+
 @dataclass
 class Task(Model):
     id: uuid.UUID
@@ -73,3 +94,21 @@ class Task(Model):
         from bing.service.camunda import complete_task
 
         complete_task(self.id, variables)
+
+
+@dataclass
+class ProcessDefinition(Model):
+    id: str
+    key: str
+    name: str
+    category: str
+    version: int
+    deployment_id: uuid.UUID
+    resource: str  # filename
+    startable_in_tasklist: bool
+    suspended: bool
+    description: Optional[str] = None
+    tenant_id: Optional[str] = None
+    version_tag: Optional[str] = None  # unsure
+    diagram: Optional[str] = None  # unsure
+    history_time_to_live: Optional[str] = None  # unsure
