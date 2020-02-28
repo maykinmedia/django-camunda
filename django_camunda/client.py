@@ -23,6 +23,11 @@ def get_client_class() -> type:
     return import_string(client_class)
 
 
+def get_client(*args, **kwargs):
+    client_class = get_client_class()
+    return client_class(*args, **kwargs)
+
+
 class Camunda:
     def __init__(self, config: Optional[CamundaConfig] = None):
         self.config = config or CamundaConfig.get_solo()
@@ -37,6 +42,8 @@ class Camunda:
     def request(self, path: str, method="GET", *args, **kwargs):
         assert not path.startswith("/"), "Provide relative API paths"
         url = urljoin(self.root_url, path)
+
+        do_underscoreize = kwargs.pop("underscoreize", True)
 
         # add the API headers, so that Camunda can use the tokens. Essentially
         # we're forwarding Auth
@@ -65,7 +72,8 @@ class Camunda:
                     if isinstance(response_data, (dict, list)):
                         self.postprocess_response_data(response_data)
 
-                    response_data = underscoreize(response_data)
+                    if do_underscoreize:
+                        response_data = underscoreize(response_data)
                 else:
                     # binary content
                     response_data = response.content
