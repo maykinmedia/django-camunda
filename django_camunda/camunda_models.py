@@ -1,16 +1,26 @@
 import uuid
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any, Dict, List, Optional, Union
 
 from dateutil.parser import parse
 
 from .types import JSONObject
 
+
+def noop(value: Any) -> Any:
+    return value
+
+
 CONVERTERS = {
     type(None): lambda x: None,
+    str: noop,
+    int: noop,
+    float: noop,
+    dict: noop,  # TODO: recurse?
     uuid.UUID: lambda value: uuid.UUID(value),
     datetime: parse,
+    date: date.fromisoformat,
 }
 
 
