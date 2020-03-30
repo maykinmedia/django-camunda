@@ -43,7 +43,7 @@ class Model:
                     continue
 
                 # Optional is ONE type combined with None
-                typehint = next(t for t in typehint.__args__ if t is not None)
+                typehint = next(t for t in typehint if t is not None)
 
             if isinstance(value, typehint):
                 continue
