@@ -1,7 +1,7 @@
 import uuid
 from dataclasses import dataclass
 from datetime import date, datetime
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, List, Optional, Union
 
 from dateutil.parser import parse
 
@@ -94,16 +94,6 @@ class Task(Model):
     suspended: bool
     form_key: None
     tenant_id: None
-
-    def claim(self) -> None:
-        from bing.service.camunda import claim_task
-
-        claim_task(self.id)
-
-    def complete(self, variables: Dict[str, Any]) -> None:
-        from bing.service.camunda import complete_task
-
-        complete_task(self.id, variables)
 
 
 @dataclass
