@@ -75,7 +75,7 @@ def factory(model: type, data: Union[JSONObject, List[JSONObject]]) -> type:
 class Task(Model):
     id: uuid.UUID
     name: str
-    assignee: None
+    assignee: str
     created: datetime
     due: Optional[datetime]
     follow_up: None
