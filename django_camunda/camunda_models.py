@@ -75,25 +75,25 @@ def factory(model: type, data: Union[JSONObject, List[JSONObject]]) -> type:
 class Task(Model):
     id: uuid.UUID
     name: str
-    assignee: str
+    assignee: Optional[str]
     created: datetime
     due: Optional[datetime]
-    follow_up: None
-    delegation_state: None
-    description: None
+    follow_up: Optional[str]
+    delegation_state: Optional[str]
+    description: Optional[str]
     execution_id: str
-    owner: None
-    parent_task_id: None
+    owner: Optional[str]
+    parent_task_id: Optional[uuid.UUID]
     priority: int
     process_definition_id: str
     process_instance_id: uuid.UUID
     task_definition_key: str
-    case_execution_id: None
-    case_instance_id: None
-    case_definition_id: None
+    case_execution_id: Optional[str]
+    case_instance_id: Optional[str]
+    case_definition_id: Optional[str]
     suspended: bool
-    form_key: None
-    tenant_id: None
+    form_key: Optional[str]
+    tenant_id: Optional[str]
 
 
 @dataclass
