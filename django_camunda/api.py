@@ -1,11 +1,13 @@
 """
 Public Python API to interact with Activiti.
 """
-from typing import Dict, List, Optional
+import uuid
+from typing import Dict, List, Optional, Union
 
 from .camunda_models import ProcessDefinition, factory
 from .client import get_client
-from .types import JSONObject
+from .types import JSONObject, ProcessVariable, ProcessVariables
+from .utils import deserialize_variable
 
 
 def get_process_definitions() -> List[ProcessDefinition]:
@@ -37,4 +39,33 @@ def get_start_form_variables(
     client = get_client()
     variables = client.get(endpoint, underscoreize=False)
 
+    return variables
+
+
+def get_process_instance_variable(
+    instance_id: Union[uuid.UUID, str], name: str
+) -> ProcessVariable:
+    client = get_client()
+
+    response_data = client.get(
+        f"process-instance/{instance_id}/variables/{name}",
+        params={"deserializeValues": "false"},
+        underscoreize=False,
+    )
+    return deserialize_variable(response_data)
+
+
+def get_all_process_instance_variables(
+    instance_id: Union[uuid.UUID, str]
+) -> ProcessVariables:
+    client = get_client()
+
+    response_data = client.get(
+        f"process-instance/{instance_id}/variables",
+        params={"deserializeValues": "false"},
+        underscoreize=False,
+    )
+    variables = {
+        name: deserialize_variable(variable) for name, variable in response_data.items()
+    }
     return variables
