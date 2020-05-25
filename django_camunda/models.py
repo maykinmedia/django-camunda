@@ -8,6 +8,11 @@ from solo.models import SingletonModel
 
 
 class CamundaConfig(SingletonModel):
+    enabled = models.BooleanField(
+        _("enabled"),
+        default=True,
+        help_text=_("Global flag to enable/disable Camund integration."),
+    )
     root_url = models.URLField(
         _("camunda root"),
         help_text=_(
@@ -35,6 +40,10 @@ class CamundaConfig(SingletonModel):
 
     def clean(self):
         from .client import get_client_class
+
+        # skip any and all validations if it's not enabled anyway
+        if not self.enabled:
+            return
 
         client = get_client_class()(config=self)
         try:
