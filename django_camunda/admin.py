@@ -1,5 +1,5 @@
+from django import forms
 from django.contrib import admin
-from django.contrib.admin import widgets
 from django.utils.translation import gettext_lazy as _
 
 from solo.admin import SingletonModelAdmin
@@ -37,10 +37,7 @@ class CamundaFieldsMixin:
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         if self._is_enabled(request) and isinstance(db_field, ProcessDefinitionField):
             kwargs.update(
-                {
-                    "widget": widgets.AdminRadioSelect(),
-                    "choices": get_process_definition_choices(),
-                }
+                {"widget": forms.Select, "choices": get_process_definition_choices()}
             )
 
         return super().formfield_for_dbfield(db_field, request, **kwargs)

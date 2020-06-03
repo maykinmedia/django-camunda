@@ -1,11 +1,22 @@
 import json
 from datetime import date, datetime
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Tuple, Union
 
 import inflection
 from dateutil import parser
 
+from .constants import LATEST
 from .types import ProcessVariable
+
+
+def parse_definition(definition_ref: str) -> Tuple[bool, str]:
+    """
+    Given a definition reference, parse it to determine if it's a specific version.
+    """
+    bits = definition_ref.split(":")
+    if len(bits) == 2 and bits[1] == LATEST:
+        return (True, bits[0])
+    return (False, definition_ref)
 
 
 def noop(val):

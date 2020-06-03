@@ -3,10 +3,10 @@ from itertools import groupby
 from typing import List, Tuple, Union
 
 from django import forms
-from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from .api import get_process_definitions
+from .constants import LATEST
 from .models import CamundaConfig
 
 Choice = Tuple[str, str]
@@ -74,14 +74,16 @@ def get_process_definition_choices() -> List[Tuple[str, List[Choice]]]:
     definitions = sorted(definitions, key=lambda d: (d.key, -d.version))
     def_by_key = groupby(definitions, lambda x: x.key)
 
+    def get_latest_choice(key: str):
+        value = f"{key}:{LATEST}"
+        return (value, _("latest"))
+
     choices = [
         (
-            format_html(_("Process: <code>{key}</code>"), key=key),
-            [
-                (
-                    definition.id,
-                    _("{d.name} (version {d.version})").format(d=definition),
-                )
+            key,
+            [get_latest_choice(key)]
+            + [
+                (definition.id, _("version {d.version}").format(d=definition))
                 for definition in definitions
             ],
         )
