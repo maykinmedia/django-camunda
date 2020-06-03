@@ -28,8 +28,14 @@ class CamundaConfigAdmin(SingletonModelAdmin):
 
 
 class CamundaFieldsMixin:
+    def _is_enabled(self, request) -> bool:
+        # cache on the request, as model admin instances persist across requests
+        if not hasattr(request, "_camunda_config"):
+            request._camunda_config = CamundaConfig.get_solo()
+        return request._camunda_config.enabled
+
     def formfield_for_dbfield(self, db_field, request, **kwargs):
-        if isinstance(db_field, ProcessDefinitionField):
+        if self._is_enabled(request) and isinstance(db_field, ProcessDefinitionField):
             kwargs.update(
                 {
                     "widget": widgets.AdminRadioSelect(),
