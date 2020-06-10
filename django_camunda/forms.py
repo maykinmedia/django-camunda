@@ -1,6 +1,7 @@
 import base64
 from itertools import groupby
 from typing import List, Tuple, Union
+from xml.etree.ElementTree import Element
 
 from django import forms
 from django.utils.translation import gettext_lazy as _
@@ -97,3 +98,38 @@ class ProcessDefinitionChoicesField(forms.ChoiceField):
         kwargs.pop("max_length", None)
         kwargs.setdefault("choices", get_process_definition_choices)
         super().__init__(*args, **kwargs)
+
+
+FIELD_TYPE_MAP = {
+    "enum": forms.ChoiceField,
+    "string": forms.CharField,
+    "long": forms.IntegerField,
+    "boolean": forms.BooleanField,
+    "date": forms.DateTimeField,
+}
+
+
+def formfield_from_xml(definition: Element) -> Tuple[str, forms.Field]:
+    name = definition.attrib["id"]
+    label = definition.attrib.get("label", "")
+    default = definition.attrib.get("defaultValue")
+
+    field_type = definition.attrib["type"]
+    if field_type not in FIELD_TYPE_MAP:
+        raise NotImplementedError(f"Unknown field type '{field_type}'")
+
+    field_class = FIELD_TYPE_MAP[field_type]
+
+    field_kwargs = {
+        "label": label,
+        "initial": default,
+    }
+
+    if field_type == "enum":
+        field_kwargs["choices"] = [
+            (value.attrib["id"], value.attrib["name"])
+            for value in definition.getchildren()
+        ]
+        field_kwargs["widget"] = forms.RadioSelect
+
+    return name, field_class(required=True, **field_kwargs)

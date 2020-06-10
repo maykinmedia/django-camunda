@@ -2,12 +2,12 @@
 Public Python API to interact with Activiti.
 """
 import uuid
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, Iterable, List, Optional, Union
 
 from .camunda_models import ProcessDefinition, factory
 from .client import get_client
-from .types import JSONObject, ProcessVariable, ProcessVariables
-from .utils import deserialize_variable
+from .types import CamundaId, JSONObject, ProcessVariable, ProcessVariables
+from .utils import deserialize_variable, serialize_variable
 
 
 def get_process_definitions() -> List[ProcessDefinition]:
@@ -69,3 +69,38 @@ def get_all_process_instance_variables(
         name: deserialize_variable(variable) for name, variable in response_data.items()
     }
     return variables
+
+
+def send_message(
+    name: str,
+    process_instance_ids: Iterable[CamundaId],
+    variables: Optional[Dict[str, Any]] = None,
+) -> None:
+    """
+    Send a BPMN message into running process instances, with optional process variables.
+
+    :param name: Name/ID of the message definition, extract this from the process.
+    :param process_instance_ids: an iterable of process instance IDs, can be uuid
+      instances or strings.
+    :param variables: Optional mapping of ``{name: value}`` process variables. Will be
+      serialized as part of the message sending.
+    """
+    client = get_client()
+    variables = (
+        {name: serialize_variable(value) for name, value in variables.items()}
+        if variables
+        else None
+    )
+    for instance_id in process_instance_ids:
+        body = {
+            "messageName": name,
+            "CamundaId": instance_id,
+            "processVariables": variables or {},
+        }
+        client.post("message", json=body)
+
+
+def complete_task(task_id: CamundaId, variables: dict) -> None:
+    client = get_client()
+    variables = {name: serialize_variable(value) for name, value in variables.items()}
+    client.post(f"task/{task_id}/complete", json={"variables": variables})
