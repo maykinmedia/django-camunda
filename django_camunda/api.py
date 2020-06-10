@@ -94,7 +94,7 @@ def send_message(
     for instance_id in process_instance_ids:
         body = {
             "messageName": name,
-            "CamundaId": instance_id,
+            "processInstanceId": instance_id,
             "processVariables": variables or {},
         }
         client.post("message", json=body)
