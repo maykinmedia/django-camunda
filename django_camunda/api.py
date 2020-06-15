@@ -1,12 +1,11 @@
 """
 Public Python API to interact with Activiti.
 """
-import uuid
-from typing import Any, Dict, Iterable, List, Optional, Union
+from typing import Any, Dict, Iterable, List, Optional
 
 from .camunda_models import ProcessDefinition, factory
 from .client import get_client
-from .types import CamundaId, JSONObject, ProcessVariable, ProcessVariables
+from .types import CamundaId, ProcessVariables
 from .utils import deserialize_variable, serialize_variable
 
 
@@ -18,7 +17,7 @@ def get_process_definitions() -> List[ProcessDefinition]:
 
 def get_start_form_variables(
     process_key: Optional[str] = None, process_id: Optional[str] = None
-) -> Dict[str, JSONObject]:
+) -> ProcessVariables:
     """
     Get the start form variables from the Camunda process.
 
@@ -42,33 +41,41 @@ def get_start_form_variables(
     return variables
 
 
-def get_process_instance_variable(
-    instance_id: Union[uuid.UUID, str], name: str
-) -> ProcessVariable:
+def _get_variable(kind: str, id_ref: CamundaId, name: str) -> Any:
     client = get_client()
-
+    path = f"{kind}/{id_ref}/variables/{name}"
     response_data = client.get(
-        f"process-instance/{instance_id}/variables/{name}",
-        params={"deserializeValues": "false"},
-        underscoreize=False,
+        path, params={"deserializeValues": "false"}, underscoreize=False
     )
     return deserialize_variable(response_data)
 
 
-def get_all_process_instance_variables(
-    instance_id: Union[uuid.UUID, str]
-) -> ProcessVariables:
+def _get_variables(kind: str, id_ref: CamundaId) -> Dict[str, Any]:
     client = get_client()
-
+    path = f"{kind}/{id_ref}/variables"
     response_data = client.get(
-        f"process-instance/{instance_id}/variables",
-        params={"deserializeValues": "false"},
-        underscoreize=False,
+        path, params={"deserializeValues": "false"}, underscoreize=False
     )
     variables = {
         name: deserialize_variable(variable) for name, variable in response_data.items()
     }
     return variables
+
+
+def get_process_instance_variable(instance_id: CamundaId, name: str) -> Any:
+    return _get_variable("process-instance", instance_id, name)
+
+
+def get_all_process_instance_variables(instance_id: CamundaId) -> Dict[str, Any]:
+    return _get_variable("process-instance", instance_id)
+
+
+def get_task_variable(task_id: CamundaId, name: str) -> Any:
+    return _get_variable("task", task_id, name)
+
+
+def get_task_variables(task_id: CamundaId) -> Dict[str, Any]:
+    return _get_variables("task", task_id)
 
 
 def send_message(
