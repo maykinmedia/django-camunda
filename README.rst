@@ -7,7 +7,7 @@
 Welcome to django-camunda's documentation!
 =================================================
 
-:Version: 0.9.1
+:Version: 0.9.2
 :Source: https://github.com/maykinmedia/django-camunda
 :Keywords: camunda, process engine, bpmn
 :PythonVersion: 3.7
