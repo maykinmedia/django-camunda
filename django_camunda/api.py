@@ -3,6 +3,8 @@ Public Python API to interact with Activiti.
 """
 from typing import Any, Dict, Iterable, List, Optional
 
+import requests
+
 from .camunda_models import ProcessDefinition, factory
 from .client import get_client
 from .types import CamundaId, ProcessVariables
@@ -70,8 +72,13 @@ def get_all_process_instance_variables(instance_id: CamundaId) -> Dict[str, Any]
     return _get_variable("process-instance", instance_id)
 
 
-def get_task_variable(task_id: CamundaId, name: str) -> Any:
-    return _get_variable("task", task_id, name)
+def get_task_variable(task_id: CamundaId, name: str, default=None) -> Any:
+    try:
+        return _get_variable("task", task_id, name)
+    except requests.HTTPError as exc:
+        if exc.response.status_code == 404:  # variable not set
+            return default
+        raise
 
 
 def get_task_variables(task_id: CamundaId) -> Dict[str, Any]:

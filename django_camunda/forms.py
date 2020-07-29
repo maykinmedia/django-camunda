@@ -120,10 +120,7 @@ def formfield_from_xml(definition: Element) -> Tuple[str, forms.Field]:
 
     field_class = FIELD_TYPE_MAP[field_type]
 
-    field_kwargs = {
-        "label": label,
-        "initial": default,
-    }
+    field_kwargs = {"label": label, "initial": default}
 
     if field_type == "enum":
         field_kwargs["choices"] = [
