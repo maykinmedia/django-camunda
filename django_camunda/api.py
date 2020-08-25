@@ -69,7 +69,7 @@ def get_process_instance_variable(instance_id: CamundaId, name: str) -> Any:
 
 
 def get_all_process_instance_variables(instance_id: CamundaId) -> Dict[str, Any]:
-    return _get_variable("process-instance", instance_id)
+    return _get_variables("process-instance", instance_id)
 
 
 def get_task_variable(task_id: CamundaId, name: str, default=None) -> Any:
