@@ -1,7 +1,7 @@
 import uuid
 from dataclasses import dataclass
 from datetime import date, datetime
-from typing import Any, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from dateutil.parser import parse
 
@@ -52,10 +52,24 @@ class Model:
             setattr(self, attr, converter(value))
 
 
-def factory(model: type, data: Union[JSONObject, List[JSONObject]]) -> type:
+def get_all_annotations(cls: type) -> Dict[str, Any]:
+    annotations = {}
+    for supercls in cls.__bases__:
+        super_annotations = get_all_annotations(supercls)
+        annotations.update(super_annotations)
+
+    # Follow MRO - most specific top-level class wins, otherwise left-to-right
+    if hasattr(cls, "__annotations__"):
+        annotations.update(cls.__annotations__)
+    return annotations
+
+
+def factory(
+    model: type, data: Union[JSONObject, List[JSONObject]]
+) -> Union[type, List[type]]:
     _is_collection = isinstance(data, list)
 
-    known_kwargs = list(model.__annotations__.keys())
+    known_kwargs = list(get_all_annotations(model).keys())
 
     def _normalize(kwargs: dict):
         to_keep = {key: value for key, value in kwargs.items() if key in known_kwargs}
