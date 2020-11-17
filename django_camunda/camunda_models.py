@@ -29,7 +29,8 @@ class Model:
         self._type_cast()
 
     def _type_cast(self):
-        for attr, typehint in self.__annotations__.items():
+        annotations = get_all_annotations(self.__class__)
+        for attr, typehint in annotations.items():
             value = getattr(self, attr)
 
             if typehint is None:
