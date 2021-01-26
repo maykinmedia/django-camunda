@@ -5,7 +5,7 @@ from typing import Any, Dict, Iterable, List, Optional
 
 import requests
 
-from .camunda_models import ProcessDefinition, factory
+from .camunda_models import ProcessDefinition, Task, factory
 from .client import get_client
 from .types import CamundaId, ProcessVariables
 from .utils import deserialize_variable, serialize_variable
@@ -112,6 +112,45 @@ def send_message(
             "processVariables": variables or {},
         }
         client.post("message", json=body)
+
+
+def get_task(
+    task_id: CamundaId, check_history=False, factory_cls=Task
+) -> Optional[Task]:
+    client = get_client()
+    try:
+        data = client.get(f"task/{task_id}")
+    except requests.HTTPError as exc:
+        if exc.response.status_code == 404:
+            if not check_history:
+                return None
+
+            # see if we can get it from the history
+            historical = client.get("history/task", {"taskId": task_id})
+            if not historical:
+                return None
+
+            assert (
+                len(historical) < 2
+            ), f"Found multiple tasks in the history for ID {task_id}"
+
+            data = historical[0]
+            # these properties do not exist in the history API:
+            # https://docs.camunda.org/manual/7.11/reference/rest/history/task/get-task-query/
+            data.update(
+                {
+                    "created": data["start_time"],
+                    "delegation_state": None,
+                    "suspended": False,
+                    "form_key": None,  # cannot determine this...
+                    "historical": True,
+                }
+            )
+
+        else:
+            raise
+
+    return factory(factory_cls, data)
 
 
 def complete_task(task_id: CamundaId, variables: dict) -> None:
