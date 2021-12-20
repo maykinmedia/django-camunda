@@ -32,6 +32,15 @@ class Camunda:
     def __init__(self, config: Optional[CamundaConfig] = None):
         self.config = config or CamundaConfig.get_solo()
         self.root_url = self.config.api_root
+        self.session = None
+
+    def __enter__(self):
+        if self.session is None:
+            self.session = requests.Session()
+        return self
+
+    def __exit__(self, *args):
+        self.session.__exit__(*args)
 
     @property
     def auth(self) -> dict:
@@ -58,7 +67,9 @@ class Camunda:
 
         _ref = self.before_request(method, url, *args, **kwargs)
 
-        response = requests.request(method, url, *args, **kwargs)
+        # ensure this works both with client as context manager or as one-off session
+        session = self.session or requests
+        response = session.request(method, url, *args, **kwargs)
         response_data = None
 
         try:

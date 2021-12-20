@@ -1,22 +1,15 @@
-
-
-.. django-camunda documentation master file, created by startproject.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Welcome to django-camunda's documentation!
-=================================================
+Camunda client for Django
+=========================
 
 :Version: 0.10.0
 :Source: https://github.com/maykinmedia/django-camunda
 :Keywords: camunda, process engine, bpmn
-:PythonVersion: 3.7
 
-|build-status| |requirements| |coverage|
+|build-status| |linting| |coverage|
 
 |python-versions| |django-versions| |pypi-version|
 
-<One liner describing the project>
+Interact with Camunda BPMN processes from Django projects.
 
 .. contents::
 
@@ -25,7 +18,7 @@ Welcome to django-camunda's documentation!
 Features
 ========
 
-* Admin model for Camunda configuration
+* Configure Camunda connection parameters from the admin
 * Shared Celery tasks
 * Domain models as Python objects
 * Complex/custom process variable support
@@ -36,10 +29,10 @@ Installation
 Requirements
 ------------
 
-* Python 3.7 or above (3.6 probably also works with the package ``dataclasses``)
+* Python 3.7 or above
 * setuptools 30.3.0 or above
 * Django 2.2 or above
-* Celery
+* Celery [optional]
 
 
 Install
@@ -48,6 +41,12 @@ Install
 .. code-block:: bash
 
     pip install django-camunda
+
+or with Celery support:
+
+.. code-block:: bash
+
+    pip install django-camunda[celery]
 
 Next, ensure the following apps are installed:
 
@@ -60,20 +59,56 @@ Next, ensure the following apps are installed:
         ...
     ]
 
+and run migrations:
+
+.. code-block:: bash
+
+    python manage.py migrate
+
 Usage
 =====
 
-TODO
+Configuration
+-------------
+
+1. In the admin, navigate to **django-camunda** > **Camunda configuration**
+2. Fill out the API connection parameters for your Camunda instance
 
 
-.. |build-status| image:: https://travis-ci.org/maykinmedia/django-camunda.svg?branch=develop
-    :target: https://travis-ci.org/maykinmedia/django-camunda
+Using the API client
+--------------------
 
-.. |requirements| image:: https://requires.io/github/maykinmedia/django-camunda/requirements.svg?branch=develop
-    :target: https://requires.io/github/maykinmedia/django-camunda/requirements/?branch=develop
-    :alt: Requirements status
+**Built-in API functions**
 
-.. |coverage| image:: https://codecov.io/gh/maykinmedia/django-camunda/branch/develop/graph/badge.svg
+The module ``django_camunda.api`` contains a number of pre-defined API endpoint
+bindings. If what you're looking for does not exist (yet), you can use the low-level
+API client (see below).
+
+**Core usage**
+
+The Camunda client class is a wrapper around the
+`requests <https://pypi.org/project/requests/>`_ library and as such aims to provide
+the same Python interface.
+
+.. code-block:: python
+
+    from django_camunda.client import get_client
+
+    with get_client() as client:
+        task = client.get("task/5c793356-24f5-4f82-a5ce-a3cce43b762b")
+
+    ... # do something with the task details
+
+
+.. |build-status| image:: https://github.com/maykinmedia/django-camunda/workflows/Run%20CI/badge.svg
+    :target: https://github.com/maykinmedia/django-camunda/actions?query=workflow%3A%22Run+CI%22
+    :alt: Run CI
+
+.. |linting| image:: https://github.com/maykinmedia/django-camunda/workflows/Code%20quality%20checks/badge.svg
+    :target: https://github.com/maykinmedia/django-camunda/actions?query=workflow%3A%22Code+quality+checks%22
+    :alt: Code linting
+
+.. |coverage| image:: https://codecov.io/gh/maykinmedia/django-camunda/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/maykinmedia/django-camunda
     :alt: Coverage status
 
