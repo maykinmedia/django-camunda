@@ -11,7 +11,7 @@ class CamundaConfig(SingletonModel):
     enabled = models.BooleanField(
         _("enabled"),
         default=True,
-        help_text=_("Global flag to enable/disable Camund integration."),
+        help_text=_("Global flag to enable/disable Camunda integration."),
     )
     root_url = models.URLField(
         _("camunda root"),

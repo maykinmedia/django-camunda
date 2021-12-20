@@ -13,7 +13,7 @@ from .models import CamundaConfig
 class CamundaConfigAdmin(SingletonModelAdmin):
     form = CamundaConfigForm
     fieldsets = (
-        (None, {"fields": ("root_url", "rest_api_path")}),
+        (None, {"fields": ("root_url", "rest_api_path", "enabled")}),
         (
             _("Auth"),
             {
