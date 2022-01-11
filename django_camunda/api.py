@@ -47,7 +47,7 @@ def _get_variable(kind: str, id_ref: CamundaId, name: str) -> Any:
     client = get_client()
     path = f"{kind}/{id_ref}/variables/{name}"
     response_data = client.get(
-        path, params={"deserializeValues": "false"}, underscoreize=False
+        path, params={"deserializeValue": "false"}, underscoreize=False
     )
     return deserialize_variable(response_data)
 
