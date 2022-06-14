@@ -1,5 +1,10 @@
 import uuid
-from typing import Any, Dict, List, TypedDict, Union
+from typing import Any, Dict, List, Union
+
+try:
+    from typing import TypedDict
+except ImportError:
+    from typing_extensions import TypedDict
 
 JSONPrimitive = Union[str, int, None, float]
 JSONValue = Union[JSONPrimitive, "JSONObject", List["JSONValue"]]
