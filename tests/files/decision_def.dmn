@@ -32,7 +32,7 @@
           <text>"allow"</text>
         </outputEntry>
         <outputEntry id="LiteralExpression_1g089v5">
-          <text>SSH required for server access</text>
+          <text>"SSH required for server access"</text>
         </outputEntry>
       </rule>
       <rule id="DecisionRule_0rub3bt">
@@ -46,7 +46,7 @@
           <text>"allow"</text>
         </outputEntry>
         <outputEntry id="LiteralExpression_0tpcw4i">
-          <text>HTTPS traffic</text>
+          <text>"HTTPS traffic"</text>
         </outputEntry>
       </rule>
       <rule id="DecisionRule_0pwrdzo">
@@ -60,7 +60,7 @@
           <text>"allow"</text>
         </outputEntry>
         <outputEntry id="LiteralExpression_18y5i5c">
-          <text>All outgoing requests allowed</text>
+          <text>"All outgoing requests allowed"</text>
         </outputEntry>
       </rule>
       <rule id="DecisionRule_0xxjr9b">
@@ -74,7 +74,7 @@
           <text>"deny"</text>
         </outputEntry>
         <outputEntry id="LiteralExpression_1ud8jkn">
-          <text>Block by default</text>
+          <text>"Block by default"</text>
         </outputEntry>
       </rule>
     </decisionTable>
