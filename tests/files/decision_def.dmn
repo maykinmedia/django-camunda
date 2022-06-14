@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="access-rules" name="Access rules" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="access-rules" name="Access rules" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
   <decision id="firewall_rules" name="Firewall">
     <decisionTable id="DecisionTable_1hgjenw" hitPolicy="FIRST">
       <input id="Input_1" label="Direction">
@@ -15,6 +15,16 @@
           <text>port</text>
         </inputExpression>
       </input>
+      <input id="InputClause_1f09wt8" label="Camunda variable" camunda:inputVariable="someVar">
+        <inputExpression id="LiteralExpression_0yh63r4" typeRef="string">
+          <text></text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0xg43gn">
+        <inputExpression id="LiteralExpression_0ufebpf" typeRef="string">
+          <text></text>
+        </inputExpression>
+      </input>
       <output id="Output_1" label="Policy" name="policy" typeRef="string">
         <outputValues id="UnaryTests_0836ktd">
           <text>"allow","deny"</text>
@@ -27,6 +37,12 @@
         </inputEntry>
         <inputEntry id="UnaryTests_0gta8d7">
           <text>22</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_074nq7a">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1478zvm">
+          <text></text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0982s7w">
           <text>"allow"</text>
@@ -42,6 +58,12 @@
         <inputEntry id="UnaryTests_1xfw0g6">
           <text>443</text>
         </inputEntry>
+        <inputEntry id="UnaryTests_1ig8ujf">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1px08kh">
+          <text></text>
+        </inputEntry>
         <outputEntry id="LiteralExpression_1mo1fgx">
           <text>"allow"</text>
         </outputEntry>
@@ -56,6 +78,12 @@
         <inputEntry id="UnaryTests_19w2zmf">
           <text></text>
         </inputEntry>
+        <inputEntry id="UnaryTests_19j6atc">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0fseq9z">
+          <text></text>
+        </inputEntry>
         <outputEntry id="LiteralExpression_1umv9fv">
           <text>"allow"</text>
         </outputEntry>
@@ -68,6 +96,12 @@
           <text>"incoming"</text>
         </inputEntry>
         <inputEntry id="UnaryTests_1qywaqg">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_138z2bj">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1f2y8ij">
           <text></text>
         </inputEntry>
         <outputEntry id="LiteralExpression_13pexeb">

@@ -1,7 +1,3 @@
-import os
-
-import pytest
-
 from django_camunda.dmn import evaluate_dmn
 
 
