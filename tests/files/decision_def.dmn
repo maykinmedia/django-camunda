@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="access-rules" name="Access rules" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+  <decision id="firewall_rules" name="Firewall">
+    <decisionTable id="DecisionTable_1hgjenw" hitPolicy="FIRST">
+      <input id="Input_1" label="Direction">
+        <inputExpression id="InputExpression_1" typeRef="string">
+          <text>direction</text>
+        </inputExpression>
+        <inputValues id="UnaryTests_061aym4">
+          <text>"incoming","outgoing"</text>
+        </inputValues>
+      </input>
+      <input id="InputClause_1cn8gp3" label="Port number">
+        <inputExpression id="LiteralExpression_0zva6sq" typeRef="integer">
+          <text>port</text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="Policy" name="policy" typeRef="string">
+        <outputValues id="UnaryTests_0836ktd">
+          <text>"allow","deny"</text>
+        </outputValues>
+      </output>
+      <output id="OutputClause_0lzmnio" label="Reason" name="reason" typeRef="string" />
+      <rule id="DecisionRule_0uk1ni5">
+        <inputEntry id="UnaryTests_06apgvw">
+          <text>"incoming"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0gta8d7">
+          <text>22</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0982s7w">
+          <text>"allow"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1g089v5">
+          <text>SSH required for server access</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0rub3bt">
+        <inputEntry id="UnaryTests_0rhs77h">
+          <text>"incoming"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1xfw0g6">
+          <text>443</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1mo1fgx">
+          <text>"allow"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0tpcw4i">
+          <text>HTTPS traffic</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0pwrdzo">
+        <inputEntry id="UnaryTests_0sm8s3e">
+          <text>"outgoing"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_19w2zmf">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1umv9fv">
+          <text>"allow"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_18y5i5c">
+          <text>All outgoing requests allowed</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0xxjr9b">
+        <inputEntry id="UnaryTests_0s6yuw4">
+          <text>"incoming"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1qywaqg">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_13pexeb">
+          <text>"deny"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1ud8jkn">
+          <text>Block by default</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="firewall_rules">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
