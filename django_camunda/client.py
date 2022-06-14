@@ -23,7 +23,7 @@ def get_client_class() -> type:
     return import_string(client_class)
 
 
-def get_client(*args, **kwargs):
+def get_client(*args, **kwargs) -> "Camunda":
     client_class = get_client_class()
     return client_class(*args, **kwargs)
 
@@ -35,6 +35,7 @@ class Camunda:
         self.session = None
 
     def __enter__(self):
+        # TODO: sort out connection pooling through a module stack
         if self.session is None:
             self.session = requests.Session()
         return self
@@ -48,7 +49,7 @@ class Camunda:
             return {}
         return {"Authorization": self.config.auth_header}
 
-    def request(self, path: str, method="GET", *args, **kwargs):
+    def request(self, path: str, method="GET", *args, **kwargs) -> Any:
         assert not path.startswith("/"), "Provide relative API paths"
         url = urljoin(self.root_url, path)
 
