@@ -2,9 +2,13 @@ import json
 import logging
 from typing import Any, Dict, Optional
 
+from defusedxml import ElementTree as ET
+
 from ..client import Camunda, get_client
 from ..types import VariablesMapping
 from ..utils import deserialize_variables, serialize_variables
+from .datastructures import IntrospectionResult
+from .utils import parse_dmn
 
 logger = logging.getLogger(__name__)
 
@@ -48,3 +52,13 @@ def evaluate_dmn(
     for output in result:
         output_variables.update(deserialize_variables(output))
     return output_variables
+
+
+def introspect_dmn(
+    dmn_key: str, *, dmn_id: str = "", client: Optional[Camunda] = None
+) -> IntrospectionResult:
+    client = client or get_client()
+    id_part = dmn_id if dmn_id else f"key/{dmn_key}"
+    with client:
+        xml = client.get(f"decision-definition/{id_part}/xml")["dmn_xml"]
+    return parse_dmn(xml)
