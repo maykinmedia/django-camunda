@@ -1,12 +1,12 @@
 import json
 from datetime import date, datetime
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import inflection
 from dateutil import parser
 
 from .constants import LATEST
-from .types import ProcessVariable
+from .types import ProcessVariable, ProcessVariables, VariablesMapping
 
 
 def parse_definition(definition_ref: str) -> Tuple[bool, str]:
@@ -67,6 +67,9 @@ REVERSE_TYPE_MAP = {
 
 
 def serialize_variable(value: Any) -> ProcessVariable:
+    """
+    Serialize a python type to the appropriate Camunda type.
+    """
     val_type = type(value)
     if val_type not in TYPE_MAP:
         raise NotImplementedError(f"Type {val_type} is not implemented yet")
@@ -76,6 +79,9 @@ def serialize_variable(value: Any) -> ProcessVariable:
 
 
 def deserialize_variable(variable: ProcessVariable) -> Any:
+    """
+    Deserialize a Camunda variable type into the appropriate Python type.
+    """
     var_type = variable.get("type", "String")
     converter = REVERSE_TYPE_MAP.get(var_type.lower())
     if converter:
@@ -84,3 +90,19 @@ def deserialize_variable(variable: ProcessVariable) -> Any:
         value = variable["value"]  # a JSON primitive that maps to proper python objects
 
     return value
+
+
+def serialize_variables(variables: Optional[VariablesMapping]) -> ProcessVariables:
+    """
+    Given a mapping of variables, serialize every value in the mapping.
+    """
+    if variables is None:
+        return {}
+    return {key: serialize_variable(value) for key, value in variables.items()}
+
+
+def deserialize_variables(variables: ProcessVariables) -> VariablesMapping:
+    """
+    Given a mapping of Camunda variables, deserialize every value in the mapping.
+    """
+    return {key: deserialize_variable(value) for key, value in variables.items()}

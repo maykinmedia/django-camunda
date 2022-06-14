@@ -10,16 +10,18 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  CAMUNDA_API_BASE_URL: http://localhost:8080/engine-rest/
+  CAMUNDA_USER: demo
+  CAMUNDA_PASSWORD: demo
+
 jobs:
   tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python: ['3.7', '3.8', '3.9', '3.10']
-        django: ['2.2', '3.2']
-        exclude:
-          - python: '3.10'
-            django: '2.2'
+        django: ['3.2']
 
     name: Run the test suite (Python ${{ matrix.python }}, Django ${{ matrix.django }})
 
@@ -29,8 +31,25 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
 
+      - name: Bring up Camunda instance with docker-compose
+        run: docker-compose -f docker-compose.camunda.yml up -d
+        working-directory: ./docker
+
       - name: Install dependencies
         run: pip install tox codecov
+
+      - name: Wait for Camunda to be up
+        run: |
+          endpoint="${CAMUNDA_API_BASE_URL}version"
+          version=""
+
+          until [ $version ]; do
+            echo "Checking if Camunda at ${CAMUNDA_API_BASE_URL} is up..."
+            version=$(curl -u ${CAMUNDA_USER}:${CAMUNDA_PASSWORD} "$endpoint" -s | jq -r ".version")
+            sleep 2
+          done
+
+          echo "Running Camunda $version"
 
       - name: Run tests
         run: |

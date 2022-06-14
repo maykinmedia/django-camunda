@@ -1,7 +1,7 @@
 Camunda client for Django
 =========================
 
-:Version: 0.11.1
+:Version: 0.12.0
 :Source: https://github.com/maykinmedia/django-camunda
 :Keywords: camunda, process engine, bpmn
 
@@ -15,6 +15,8 @@ Interact with Camunda BPMN processes from Django projects.
 
 .. section-numbering::
 
+Tested against Camunda 7.16
+
 Features
 ========
 
@@ -22,6 +24,7 @@ Features
 * Shared Celery tasks
 * Domain models as Python objects
 * Complex/custom process variable support
+* DMN evaluation and introspection
 
 Installation
 ============
@@ -31,7 +34,7 @@ Requirements
 
 * Python 3.7 or above
 * setuptools 30.3.0 or above
-* Django 2.2 or above
+* Django 3.2 or above
 * Celery [optional]
 
 
