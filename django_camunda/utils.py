@@ -1,4 +1,5 @@
 import json
+from collections import OrderedDict
 from datetime import date, datetime
 from typing import Any, Dict, List, Optional, Tuple, Union
 
@@ -54,6 +55,7 @@ TYPE_MAP = {
     type(None): ("Null", noop),
     dict: ("Json", json.dumps),
     list: ("Json", json.dumps),
+    OrderedDict: ("Json", json.dumps),
 }
 
 
