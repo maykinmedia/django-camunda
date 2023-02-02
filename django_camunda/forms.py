@@ -24,7 +24,8 @@ class CamundaConfigForm(forms.ModelForm):
         label=_("Password"),
         required=False,
         help_text=_("Password to authenticate against the Camunda API."),
-        widget=forms.PasswordInput,
+        # turn off autocomplete: https://stackoverflow.com/q/33113891
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
     )
 
     class Meta:
