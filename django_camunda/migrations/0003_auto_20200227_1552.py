@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("django_camunda", "0002_camundaconfig_auth_header")]
 
     operations = [

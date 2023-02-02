@@ -10,6 +10,7 @@ JSONPrimitive = Union[str, int, None, float]
 JSONValue = Union[JSONPrimitive, "JSONObject", List["JSONValue"]]
 JSONObject = Dict[str, JSONValue]
 
+
 # {"type": "Integer", "value": 42}
 class ProcessVariable(TypedDict):
     """
