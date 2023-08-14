@@ -19,9 +19,9 @@ def test_enter_basic_auth(requests_mock, django_app, admin_user):
 
     change_page = django_app.get(admin_url)
 
-    change_page.form["basic_auth_username"] = "dummy"
-    change_page.form["basic_auth_password"] = "secret"
-    change_page.form.submit().follow()
+    change_page.forms["camundaconfig_form"]["basic_auth_username"] = "dummy"
+    change_page.forms["camundaconfig_form"]["basic_auth_password"] = "secret"
+    change_page.forms["camundaconfig_form"].submit().follow()
 
     config.refresh_from_db()
     assert config.auth_header == "Basic ZHVtbXk6c2VjcmV0"
@@ -72,7 +72,7 @@ def test_select_process_definition(requests_mock, django_app, admin_user):
     )
     admin_url = reverse("admin:testapp_camunda_add")
     add_page = django_app.get(admin_url)
-    field = field = add_page.form["process_definition"]
+    field = field = add_page.forms["camunda_form"]["process_definition"]
 
     try:
         field.select("dummy:2")
