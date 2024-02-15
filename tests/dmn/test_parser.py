@@ -1,6 +1,8 @@
+from pathlib import Path
+
 from django_camunda.dmn.parser import Parser
 
-from .data.xml import TEST_DRD_XML
+TEST_DRD_XML = (Path(__file__).parent / "data" / "drd.xml").read_bytes()
 
 
 def test_extract_inputs_decision_table():

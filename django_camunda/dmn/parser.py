@@ -2,6 +2,7 @@ from typing import List
 
 from lxml.etree import fromstring
 
+from .datastructures import DMNIntrospectionResult
 from .types import DMNInputParameter, DMNOutputParameter
 from .utils import (
     extract_decision_definition_inputs,
@@ -10,8 +11,8 @@ from .utils import (
 
 
 class Parser:
-    def __init__(self, xml: str):
-        self.xml = fromstring(xml.encode("utf-8"))
+    def __init__(self, xml: bytes):
+        self.xml = fromstring(xml)
 
     def extract_inputs(self, definition_id: str) -> List[DMNInputParameter]:
         """
@@ -34,3 +35,9 @@ class Parser:
         So if the 'dependency' tables have intermediate outputs, these are not returned in the final result.
         """
         return extract_decision_definition_outputs(self.xml, definition_id)
+
+    def extract_parameters(self, definition_id: str) -> DMNIntrospectionResult:
+        return DMNIntrospectionResult(
+            inputs=self.extract_inputs(definition_id),
+            outputs=self.extract_outputs(definition_id),
+        )

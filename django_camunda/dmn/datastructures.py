@@ -1,5 +1,7 @@
 from dataclasses import dataclass
-from typing import Dict, List
+from typing import List
+
+from .types import DMNInputParameter, DMNOutputParameter
 
 
 @dataclass
@@ -10,6 +12,6 @@ class DMNVariable:
 
 
 @dataclass
-class IntrospectionResult:
-    inputs: List[DMNVariable]
-    output: Dict[str, DMNVariable]
+class DMNIntrospectionResult:
+    inputs: List[DMNInputParameter]
+    outputs: List[DMNOutputParameter]
