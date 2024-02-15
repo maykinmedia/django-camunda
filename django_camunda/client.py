@@ -1,6 +1,7 @@
 """
 Implements a camunda client.
 """
+
 import logging
 from typing import Any, Optional, Union
 from urllib.parse import urljoin
