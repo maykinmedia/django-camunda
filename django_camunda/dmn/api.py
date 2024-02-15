@@ -57,5 +57,6 @@ def introspect_dmn(
     client = client or get_client()
     id_part = dmn_id if dmn_id else f"key/{dmn_key}"
     with client:
-        xml = client.get(f"decision-definition/{id_part}/xml")["dmn_xml"]
-    return parse_dmn(xml)
+        xml: str = client.get(f"decision-definition/{id_part}/xml")["dmn_xml"]
+    # JSON response from Camunda is utf-8 encoded
+    return parse_dmn(xml.encode("utf-8"))

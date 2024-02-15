@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Tuple
 
-from defusedxml import ElementTree as ET
+from lxml import etree
 
 from .datastructures import DMNVariable, IntrospectionResult
 
@@ -30,7 +30,7 @@ def process_input_var(input_var) -> Tuple[str, DMNVariable]:
     input_expression = input_var.attrib.get(camunda_input_variable_attrib)
     if input_expression:
         expression_hint = input_expression
-    elif input_expression_element:
+    elif input_expression_element is not None:
         expression_hint = (
             input_expression_element.find("./dmn:text", CAMUNDA_NS).text or ""
         )
@@ -39,7 +39,9 @@ def process_input_var(input_var) -> Tuple[str, DMNVariable]:
 
     # type ref
     type_ref = (
-        input_expression_element.attrib["typeRef"] if input_expression_element else None
+        input_expression_element.attrib["typeRef"]
+        if input_expression_element is not None
+        else None
     )
 
     return DMNVariable(
@@ -56,8 +58,8 @@ def process_output_var(output_var) -> Tuple[str, DMNVariable]:
     return name, DMNVariable(label=label, type=TYPEREF_MAP.get(type_ref, str))
 
 
-def parse_dmn(xml: str) -> IntrospectionResult:
-    tree = ET.fromstring(xml)
+def parse_dmn(xml: bytes) -> IntrospectionResult:
+    tree = etree.fromstring(xml)
     input_vars = tree.findall(".//dmn:input", CAMUNDA_NS)
     output_vars = tree.findall(".//dmn:output", CAMUNDA_NS)
     inputs = [process_input_var(input_var) for input_var in input_vars]
