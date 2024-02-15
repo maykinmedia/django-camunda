@@ -1,8 +1,5 @@
-import json
 import logging
-from typing import Any, Dict, Optional
-
-from defusedxml import ElementTree as ET
+from typing import Optional
 
 from ..client import Camunda, get_client
 from ..types import VariablesMapping
