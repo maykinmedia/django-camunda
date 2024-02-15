@@ -1,6 +1,7 @@
 """
 Middleware to transform data from/to camunda.
 """
+
 import json
 from dataclasses import dataclass
 from typing import Union

@@ -1,6 +1,7 @@
 """
 Public Python API to interact with Activiti.
 """
+
 from typing import Any, Dict, Iterable, List, Optional
 
 import requests
