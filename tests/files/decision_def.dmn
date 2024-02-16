@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="access-rules" name="Access rules" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
-  <decision id="firewall_rules" name="Firewall">
+  <decision id="firewall_rules" name="Firewall" camunda:historyTimeToLive="30">
     <decisionTable id="DecisionTable_1hgjenw" hitPolicy="FIRST">
       <input id="Input_1" label="Direction">
         <inputExpression id="InputExpression_1" typeRef="string">

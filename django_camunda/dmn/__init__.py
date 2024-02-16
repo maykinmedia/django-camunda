@@ -1,3 +1,3 @@
-from .api import evaluate_dmn, introspect_dmn
+from .api import evaluate_dmn, get_dmn_parser
 
-__all__ = ["evaluate_dmn", "introspect_dmn"]
+__all__ = ["evaluate_dmn", "get_dmn_parser"]

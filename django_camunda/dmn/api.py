@@ -4,8 +4,7 @@ from typing import Optional
 from ..client import Camunda, get_client
 from ..types import VariablesMapping
 from ..utils import deserialize_variables, serialize_variables
-from .datastructures import IntrospectionResult
-from .utils import parse_dmn
+from .parser import Parser
 
 logger = logging.getLogger(__name__)
 
@@ -51,12 +50,12 @@ def evaluate_dmn(
     return output_variables
 
 
-def introspect_dmn(
+def get_dmn_parser(
     dmn_key: str, *, dmn_id: str = "", client: Optional[Camunda] = None
-) -> IntrospectionResult:
+) -> Parser:
     client = client or get_client()
     id_part = dmn_id if dmn_id else f"key/{dmn_key}"
     with client:
         xml: str = client.get(f"decision-definition/{id_part}/xml")["dmn_xml"]
     # JSON response from Camunda is utf-8 encoded
-    return parse_dmn(xml.encode("utf-8"))
+    return Parser(xml=xml.encode("utf-8"))
