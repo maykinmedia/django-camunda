@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="multi-drd" name="Debugging DMN" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.22.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.21.0">
+  <decision id="multi-1" name="First" camunda:historyTimeToLive="0">
+    <decisionTable id="DecisionTable_1jn6w1b" hitPolicy="FIRST">
+      <input id="InputClause_0rjywwf" label="A">
+        <inputExpression id="LiteralExpression_0cgpopl" typeRef="integer">
+          <text>a</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0pzj7js" label="Sum">
+        <inputExpression id="LiteralExpression_0i197s1" typeRef="integer">
+          <text>a + b</text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="Sum executed" name="sum" typeRef="integer" />
+      <rule id="DecisionRule_06mqgpe">
+        <inputEntry id="UnaryTests_15mf9tu">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_074uly4">
+          <text>&gt;= 100</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0s1kyja">
+          <text>100 + b</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1le7y3p">
+        <inputEntry id="UnaryTests_0qxyckx">
+          <text>&lt; 10</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_14eqn7s">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ok9nxj" expressionLanguage="feel">
+          <text>a</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0hkit8l">
+        <inputEntry id="UnaryTests_0r76pt4">
+          <text>&gt;= 10</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_09qttf3">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_08qqbu5">
+          <text>a + b</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="multi-2" name="Second" camunda:historyTimeToLive="0">
+    <informationRequirement id="InformationRequirement_077uemo">
+      <requiredDecision href="#multi-1" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_1mf04v7" hitPolicy="FIRST">
+      <input id="InputClause_01m77vk" label="Sum">
+        <inputExpression id="LiteralExpression_0eehnnj" typeRef="integer">
+          <text>sum</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0haaupp" label="Reference">
+        <inputExpression id="LiteralExpression_1eo491b" typeRef="integer">
+          <text>reference</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0xwqeoy" label="Classifier" name="classifier" typeRef="string">
+        <outputValues id="UnaryTests_0ddx53m">
+          <text>"huge","big","medium","smol"</text>
+        </outputValues>
+      </output>
+      <rule id="DecisionRule_1ufyj3e">
+        <inputEntry id="UnaryTests_17h47gw">
+          <text>&gt; 1000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0k4m2qd">
+          <text>&lt; 10</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_12fkd3t">
+          <text>"huge"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0ynx9l7">
+        <inputEntry id="UnaryTests_1g78gyw">
+          <text>&gt; 1000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1yxt9zs">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0sdo6d3">
+          <text>"big"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0p4jffs">
+        <inputEntry id="UnaryTests_11sje4u">
+          <text>&gt; 100</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0e3x4px">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0xchuw0">
+          <text>"big"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1hb09ra">
+        <inputEntry id="UnaryTests_1ouf8hu">
+          <text>&gt; 10</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0bjqxd6">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1czyet4">
+          <text>"medium"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0dxzv9h">
+        <inputEntry id="UnaryTests_17yywhv">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0q474fc">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_04act99">
+          <text>"smol"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="multi-1">
+        <dc:Bounds height="80" width="180" x="100" y="30" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1sl4kp9" dmnElementRef="InformationRequirement_077uemo">
+        <di:waypoint x="190" y="30" />
+        <di:waypoint x="340" y="-20" />
+        <di:waypoint x="340" y="-40" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_1wxaxnf" dmnElementRef="multi-2">
+        <dc:Bounds height="80" width="180" x="250" y="-120" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
