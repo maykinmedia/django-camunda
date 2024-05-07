@@ -1,4 +1,5 @@
 import os
+import warnings
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
@@ -51,3 +52,8 @@ TEMPLATES = [
 STATIC_URL = "/static/"
 
 ROOT_URLCONF = "testapp.urls"
+
+warnings.filterwarnings(
+    "ignore", "The FORMS_URLFIELD_ASSUME_HTTPS transitional setting is deprecated."
+)
+FORMS_URLFIELD_ASSUME_HTTPS = True
