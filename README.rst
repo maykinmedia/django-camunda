@@ -32,9 +32,8 @@ Installation
 Requirements
 ------------
 
-* Python 3.8 or above
-* setuptools 30.3.0 or above
-* Django 3.2 or above
+* Python 3.10+
+* Django 4.2+
 * Celery [optional]
 
 
