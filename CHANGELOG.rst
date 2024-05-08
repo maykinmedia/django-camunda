@@ -1,6 +1,25 @@
 Changelog
 =========
 
+0.15.0 (2024-05-08)
+-------------------
+
+Improved DMN handling
+
+**Breaking changes**
+
+* Dropped support for Python 3.9 and 3.10.
+* Dropped support for Django versions older than 4.2.
+* The DMN parsing types are refactored into dataclasses rather than dicts..
+
+**Changes**
+
+* Rewritten DMN parser, input and output clauses for a table now correctly process
+  dependencies.
+* Deleted dead/unused code.
+* Cleaned up tests.
+* Updated CI configuration.
+
 0.14.0 (2024-02-16)
 -------------------
 

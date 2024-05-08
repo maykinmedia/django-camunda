@@ -1,7 +1,7 @@
 Camunda client for Django
 =========================
 
-:Version: 0.14.0
+:Version: 0.15.0
 :Source: https://github.com/maykinmedia/django-camunda
 :Keywords: camunda, process engine, bpmn
 
@@ -32,9 +32,8 @@ Installation
 Requirements
 ------------
 
-* Python 3.8 or above
-* setuptools 30.3.0 or above
-* Django 3.2 or above
+* Python 3.10+
+* Django 4.2+
 * Celery [optional]
 
 
