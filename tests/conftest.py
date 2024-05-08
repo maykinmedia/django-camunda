@@ -1,7 +1,6 @@
 import base64
 import os
 from pathlib import Path
-from typing import List
 from urllib.parse import urlparse
 
 import pytest
@@ -29,6 +28,16 @@ def camunda_client():
         auth_header=f"Basic {b64}",
     )
     return get_client(config=config)
+
+
+@pytest.fixture
+def binary_asset(request) -> bytes:
+    marker = request.node.get_closest_marker("assetname")
+    assert marker
+    filename = marker.args[0]
+    assert isinstance(filename, str)
+    file = FILES_DIR / filename
+    return file.read_bytes()
 
 
 @pytest.fixture
