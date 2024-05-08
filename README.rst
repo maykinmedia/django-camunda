@@ -1,7 +1,7 @@
 Camunda client for Django
 =========================
 
-:Version: 0.14.0
+:Version: 0.15.0
 :Source: https://github.com/maykinmedia/django-camunda
 :Keywords: camunda, process engine, bpmn
 
