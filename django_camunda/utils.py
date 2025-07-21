@@ -1,7 +1,10 @@
 import json
 from collections import OrderedDict
 from datetime import date, datetime
+from functools import partial
 from typing import Any, Dict, List, Optional, Tuple, Union
+
+from django.core.serializers.json import DjangoJSONEncoder
 
 import inflection
 from dateutil import parser
@@ -53,9 +56,9 @@ TYPE_MAP = {
     float: ("Double", noop),
     str: ("String", noop),
     type(None): ("Null", noop),
-    dict: ("Json", json.dumps),
-    list: ("Json", json.dumps),
-    OrderedDict: ("Json", json.dumps),
+    dict: ("Json", partial(json.dumps, cls=DjangoJSONEncoder)),
+    list: ("Json", partial(json.dumps, cls=DjangoJSONEncoder)),
+    OrderedDict: ("Json", partial(json.dumps, cls=DjangoJSONEncoder)),
 }
 
 

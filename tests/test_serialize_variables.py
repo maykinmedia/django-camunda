@@ -14,7 +14,12 @@ def test_serialize_variables():
         "str": "some-string",
         "none": None,
         "dict": {1: 1},
+        "dict_with_dates": {
+            "date": date(1999, 12, 31),
+            "datetime": datetime(1999, 12, 31, 23, 59, 59),
+        },
         "list": [1],
+        "list_with_dates": [date(1999, 12, 31), datetime(1999, 12, 31, 23, 59, 59)],
         "ordered_dict": OrderedDict([(1, 1)]),
     }
 
@@ -27,6 +32,14 @@ def test_serialize_variables():
         "str": {"type": "String", "value": "some-string"},
         "none": {"type": "Null", "value": None},
         "dict": {"type": "Json", "value": '{"1": 1}'},
+        "dict_with_dates": {
+            "type": "Json",
+            "value": '{"date": "1999-12-31", "datetime": "1999-12-31T23:59:59"}',
+        },
         "list": {"type": "Json", "value": "[1]"},
+        "list_with_dates": {
+            "type": "Json",
+            "value": '["1999-12-31", "1999-12-31T23:59:59"]',
+        },
         "ordered_dict": {"type": "Json", "value": '{"1": 1}'},
     }
