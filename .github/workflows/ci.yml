@@ -32,7 +32,7 @@ jobs:
           python-version: ${{ matrix.python }}
 
       - name: Bring up Camunda instance with docker-compose
-        run: docker-compose -f docker-compose.camunda.yml up -d
+        run: docker compose -f docker-compose.camunda.yml up -d
         working-directory: ./docker
 
       - name: Install dependencies
