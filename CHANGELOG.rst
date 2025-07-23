@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.15.1 (2025-07-23)
+-------------------
+
+* Fixed date-related objects in containers not being serialized.
+* Updated CI configuration.
+
 0.15.0 (2024-05-08)
 -------------------
 
